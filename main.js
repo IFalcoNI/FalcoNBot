@@ -2,11 +2,15 @@ process.env['NTBA_FIX_319'] = 1;
 
 const TelegramApi = require('node-telegram-bot-api');
 const express = require('express');
+const { game, tryAgain } = require('./options');
+const sequelize = require('./connectDB');
+const UserModel = require('./models');
+
 const app = express();
 
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
-
 const bot = new TelegramApi(token, { polling: true });
+const chats = {};
 
 bot.setMyCommands([
   { command: '/start', description: 'Restart bot' },
@@ -16,65 +20,57 @@ bot.setMyCommands([
   { command: '/clear', description: 'Clear chat' }
 ]);
 
-const chats = {};
-
-const game = {
-  reply_markup: JSON.stringify({
-    inline_keyboard: [
-      [
-        { text: 1, callback_data: '1' },
-        { text: 2, callback_data: '2' },
-        { text: 3, callback_data: '3' }
-      ],
-      [
-        { text: 4, callback_data: '4' },
-        { text: 5, callback_data: '5' },
-        { text: 6, callback_data: '6' }
-      ],
-      [
-        { text: 7, callback_data: '7' },
-        { text: 8, callback_data: '8' },
-        { text: 9, callback_data: '9' }
-      ],
-      [{ text: 0, callback_data: '0' }]
-    ]
-  })
-};
-const tryAgain = {
-  reply_markup: JSON.stringify({
-    inline_keyboard: [[{ text: 'Try again', callback_data: '/again' }]]
-  })
-};
 async function startBot() {
-  bot.on('message', async (msg) => {
-    const text = msg.text;
-    const chatId = msg.from.id;
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+  } catch (error) {
+    console.error(error);
+  }
 
-    if (text === '/start') {
-      return bot.sendMessage(chatId, 'Bot has been started!');
-    }
-    if (text === '/statistics') {
-      return bot.sendMessage(chatId, `Stats`);
-    }
-    if (text === '/info') {
-      return bot.sendMessage(chatId, `Info`);
-    }
-    if (text === '/game') {
-      return startGame(chatId);
-    }
-    if (text === '/clear') {
-      for (let index = msg.message_id; index >= 1; index--) {
-        if (text == '/start') {
-        }
-        try {
-          await bot.deleteMessage(chatId, index);
-        } catch (e) {
-          console.error(e);
-        }
+  bot.on('message', async (msg) => {
+    try {
+      const text = msg.text;
+      const chatId = msg.from.id;
+
+      if (text === '/start') {
+        await UserModel.create({ chatId });
+        return bot.sendMessage(chatId, 'Bot has been started!');
       }
-      return;
+      if (text === '/statistics') {
+        const user = await UserModel.findOne({ chatId });
+        return bot.sendMessage(
+          chatId,
+          `Player: ${msg.from.first_name} ${msg.from.last_name}
+Right answers: ${user.right} 
+Wrong answers: ${user.wrong}
+Percent of winnings: ${Math.round((user.right / (user.right + user.wrong)) * 100)}%
+           `
+        );
+      }
+      if (text === '/info') {
+        return bot.sendMessage(chatId, `Info`);
+      }
+      if (text === '/game') {
+        return startGame(chatId);
+      }
+      if (text === '/clear') {
+        for (let index = msg.message_id; index >= 1; index--) {
+          if (text == '/start') {
+          }
+          try {
+            await bot.deleteMessage(chatId, index);
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        return;
+      }
+      return bot.sendMessage(chatId, 'Invalid input');
+    } catch (error) {
+      bot.sendMessage(chatId, 'Unknown erroe');
+      console.error(error);
     }
-    return bot.sendMessage(chatId, 'Invalid input');
   });
 }
 
@@ -84,21 +80,25 @@ async function startGame(id) {
   chats[id] = randomNumber;
 }
 
-bot.on('callback_query', (msg) => {
+bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
   if (text === '/again') {
     return startGame(chatId);
   }
+  const user = await UserModel.findOne({ chatId });
   if (text == chats[chatId]) {
-    return bot.sendMessage(chatId, 'You are right', tryAgain);
+    user.right += 1;
+    await bot.sendMessage(chatId, 'You are right', tryAgain);
   } else {
-    return bot.sendMessage(
+    user.wrong += 1;
+    await bot.sendMessage(
       chatId,
       `Nice try, number was ${chats[chatId]}`,
       tryAgain
     );
   }
+  await user.save();
 });
 
 startBot();
