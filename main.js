@@ -1,10 +1,10 @@
 const TelegramApi = require('node-telegram-bot-api');
-
+process.env['NTBA_FIX_319'] = 1;
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
 
 const bot = new TelegramApi(token, { polling: true });
 
-bot.getMyCommands
+bot.setMyCommands();
 
 bot.on('message', async (msg) => {
   const text = msg.text;
