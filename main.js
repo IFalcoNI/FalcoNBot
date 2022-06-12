@@ -69,7 +69,7 @@ Percent of winnings: ${Math.round(
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
-      bot.sendMessage(chatId, 'Unknown error');
+      bot.sendMessage(chatId, 'DB error');
       console.error(error);
     }
   });
