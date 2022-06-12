@@ -15,6 +15,7 @@ const chats = {};
 bot.setMyCommands([
   { command: '/start', description: 'Restart bot' },
   { command: '/statistics', description: 'Your statistic' },
+  { command: '/delete', description: 'delete your account' },
   { command: '/game', description: 'Play game' },
   { command: '/clear', description: 'Clear chat' }
 ]);
@@ -50,6 +51,9 @@ Percent of winnings: ${Math.round(
       }
       if (text === '/game') {
         return startGame(chatId);
+      }
+      if (text === '/delete') {
+        await UserModel.delete({ chatId });
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 1; index--) {

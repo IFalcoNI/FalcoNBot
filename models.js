@@ -14,11 +14,11 @@ const User = sequelize.define('users', {
   },
   right: {
     type: DataTypes.INTEGER,
-    defaultvalue: "0"
+    defaultValue: 0
   },
   wrong: {
     type: DataTypes.INTEGER,
-    defaultvalue: "0"
+    defaultValue: 0
   }
 });
 
