@@ -29,10 +29,9 @@ async function startBot() {
   }
 
   bot.on('message', async (msg) => {
+    const text = msg.text;
+    const chatId = msg.from.id;
     try {
-      const text = msg.text;
-      const chatId = msg.from.id;
-
       if (text === '/start') {
         await UserModel.create({ chatId });
         return bot.sendMessage(chatId, 'Bot has been started!');
@@ -44,7 +43,9 @@ async function startBot() {
           `Player: ${msg.from.first_name} ${msg.from.last_name}
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
-Percent of winnings: ${Math.round((user.right / (user.right + user.wrong)) * 100)}%
+Percent of winnings: ${Math.round(
+            (user.right / (user.right + user.wrong)) * 100
+          )}%
            `
         );
       }
@@ -68,7 +69,7 @@ Percent of winnings: ${Math.round((user.right / (user.right + user.wrong)) * 100
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
-      bot.sendMessage(chatId, 'Unknown erroe');
+      bot.sendMessage(chatId, 'Unknown error');
       console.error(error);
     }
   });
