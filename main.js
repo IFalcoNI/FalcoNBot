@@ -33,7 +33,7 @@ async function startBot() {
     const chatId = msg.from.id;
     try {
       if (text === '/start') {
-        await UserModel.update({ chatId });
+        await UserModel.create({ chatId });
         return bot.sendMessage(chatId, 'Bot has been started!');
       }
       if (text === '/statistics') {
