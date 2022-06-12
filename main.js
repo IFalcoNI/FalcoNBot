@@ -1,6 +1,7 @@
 process.env['NTBA_FIX_319'] = 1;
 
 const TelegramApi = require('node-telegram-bot-api');
+const app = express();
 
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
 
@@ -100,3 +101,9 @@ bot.on('callback_query', (msg) => {
 });
 
 startBot();
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, function () {
+  console.log(`Server is running at port ${PORT}`);
+});
