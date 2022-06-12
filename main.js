@@ -15,7 +15,6 @@ const chats = {};
 bot.setMyCommands([
   { command: '/start', description: 'Restart bot' },
   { command: '/statistics', description: 'Your statistic' },
-  { command: '/info', description: 'Information about bot' },
   { command: '/game', description: 'Play game' },
   { command: '/clear', description: 'Clear chat' }
 ]);
@@ -48,9 +47,6 @@ Percent of winnings: ${Math.round(
           )}%
            `
         );
-      }
-      if (text === '/info') {
-        return bot.sendMessage(chatId, `Info`);
       }
       if (text === '/game') {
         return startGame(chatId);
