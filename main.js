@@ -32,7 +32,7 @@ async function startBot() {
     const text = msg.text;
     const chatId = msg.from.id;
     const username = msg.from.username;
-    const name = `${msg.from.first_name} ${msg.from.first_name}`;
+    const name = `${msg.from.last_name} ${msg.from.first_name}`;
     try {
       if (text === '/start') {
         await UserModel.create({
