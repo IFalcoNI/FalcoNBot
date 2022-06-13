@@ -61,7 +61,7 @@ Percent of winnings: ${
         return startGame(chatId);
       }
       if (text === '/delete') {
-        const user = await UserModel.findOne({ chatId });
+        const user = await UserModel.findOne({ where: { chatId: chatId } });
         await UserModel.destroy({ where: { id: user.id } });
         return bot.sendMessage(chatId, 'User was deleted');
       }
@@ -97,7 +97,7 @@ bot.on('callback_query', async (msg) => {
   if (text === '/again') {
     return startGame(chatId);
   }
-  const user = await UserModel.findOne({ chatId });
+  const user = await UserModel.findOne({ where: { chatId: chatId } });
   if (text == chats[chatId]) {
     user.right += 1;
     await bot.sendMessage(chatId, 'You are right', tryAgain);
