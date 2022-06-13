@@ -46,7 +46,7 @@ Wrong answers: ${user.wrong}
 Percent of winnings: ${
             user.right === 0 && user.wrong === 0
               ? 0
-              : Math.round((user.right / (user.right + user.wrong) + 1) * 100)
+              : Math.round((user.right / (user.right + user.wrong)) * 100)
           }%
            `
         );
