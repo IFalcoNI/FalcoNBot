@@ -10,7 +10,7 @@ const app = express();
 
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
 const bot = new TelegramApi(token, { polling: true });
-const chats = {};
+const chats = [];
 
 bot.setMyCommands([
   { command: '/start', description: 'Restart bot' },
