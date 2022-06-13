@@ -43,9 +43,11 @@ async function startBot() {
           `Player: ${msg.from.first_name} ${msg.from.last_name}
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
-Percent of winnings: ${Math.round(
-            (user.right / (user.right + user.wrong) + 1) * 100
-          )}%
+Percent of winnings: ${
+            user.right === 0 && user.wrong === 0
+              ? 0
+              : Math.round((user.right / (user.right + user.wrong) + 1) * 100)
+          }%
            `
         );
       }
