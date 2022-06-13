@@ -62,7 +62,7 @@ Percent of winnings: ${
         if (user.chatId != null) {
           return startGame(chatId);
         } else {
-          bot.sendMessage(chatId, 'User not found');
+         return bot.sendMessage(chatId, 'User not found');
         }
       }
       if (text === '/delete') {
