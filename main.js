@@ -55,6 +55,7 @@ Percent of winnings: ${Math.round(
       if (text === '/delete') {
         // const ChatId = chatId;
         await UserModel.destroy({ where: { id: 1 } });
+        return;
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 1; index--) {
