@@ -31,12 +31,14 @@ async function startBot() {
   bot.on('message', async (msg) => {
     const text = msg.text;
     const chatId = msg.from.id;
+    const username = msg.from.username;
+    const name = `${msg.from.first_name} ${msg.from.first_name}`;
     try {
       if (text === '/start') {
         await UserModel.create({
           chatId: chatId,
-          username: msg.from.username,
-          name: `${msg.from.first_name} ${msg.from.first_name}`
+          username: username,
+          name: name
         });
         return bot.sendMessage(chatId, 'Bot has been started!');
       }
