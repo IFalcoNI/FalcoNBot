@@ -44,9 +44,10 @@ async function startBot() {
       }
       if (text === '/statistics') {
         const user = await UserModel.findOne({ chatId });
+
         return bot.sendMessage(
           chatId,
-          `Player: ${msg.from.first_name} ${msg.from.last_name}
+          `Player: ${user.name}
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
 Percent of winnings: ${
