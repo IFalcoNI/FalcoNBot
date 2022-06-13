@@ -12,6 +12,14 @@ const User = sequelize.define('users', {
     type: DataTypes.INTEGER,
     unique: true
   },
+  username: {
+    type: DataTypes.STRING,
+    unique: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    defaultValue: ''
+  },
   right: {
     type: DataTypes.INTEGER,
     defaultValue: 0
