@@ -36,13 +36,14 @@ async function startBot() {
     try {
       if (text === '/start') {
         await UserModel.create({
-          chatId: chatId
+          chatId: chatId,
+          username: username,
+          name: name
         });
         return bot.sendMessage(chatId, 'Bot has been started!');
       }
       if (text === '/statistics') {
         const user = await UserModel.findOne({ chatId });
-
         return bot.sendMessage(
           chatId,
           `Player: ${user.name}
