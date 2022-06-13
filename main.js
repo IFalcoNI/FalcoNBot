@@ -53,7 +53,7 @@ Percent of winnings: ${Math.round(
         return startGame(chatId);
       }
       if (text === '/delete') {
-        await UserModel.delete({ chatId });
+        sequelize.query('DELETE FROM "users" WHERE "id" = $1', [chatId]);
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 1; index--) {
