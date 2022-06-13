@@ -44,7 +44,7 @@ async function startBot() {
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
 Percent of winnings: ${Math.round(
-            (user.right / (user.right + user.wrong)) * 100
+            (user.right / (user.right + user.wrong) + 1) * 100
           )}%
            `
         );
@@ -71,7 +71,7 @@ Percent of winnings: ${Math.round(
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
-      bot.sendMessage(chatId, 'User was already created');
+      bot.sendMessage(chatId, 'Error');
       console.error(error);
     }
   });
