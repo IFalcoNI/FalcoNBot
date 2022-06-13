@@ -99,22 +99,26 @@ async function startGame(id) {
 bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
-  if (text === '/again') {
-    return startGame(chatId);
+  try {
+    if (text === '/again') {
+      return startGame(chatId);
+    }
+    const user = await UserModel.findOne({ where: { chatId: chatId } });
+    if (text == chats[chatId]) {
+      user.right += 1;
+      await bot.sendMessage(chatId, 'You are right', tryAgain);
+    } else {
+      user.wrong += 1;
+      await bot.sendMessage(
+        chatId,
+        `Nice try, number was ${chats[chatId]}`,
+        tryAgain
+      );
+    }
+    await user.save();
+  } catch (error) {
+    console.log(error);
   }
-  const user = await UserModel.findOne({ where: { chatId: chatId } });
-  if (text == chats[chatId]) {
-    user.right += 1;
-    await bot.sendMessage(chatId, 'You are right', tryAgain);
-  } else {
-    user.wrong += 1;
-    await bot.sendMessage(
-      chatId,
-      `Nice try, number was ${chats[chatId]}`,
-      tryAgain
-    );
-  }
-  await user.save();
 });
 
 startBot();
