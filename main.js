@@ -58,7 +58,12 @@ Percent of winnings: ${
         );
       }
       if (text === '/game') {
-        return startGame(chatId);
+        const user = await UserModel.findOne({ where: { chatId: chatId } });
+        if (user.chatId != null) {
+          return startGame(chatId);
+        } else {
+          bot.sendMessage(chatId, 'User not found');
+        }
       }
       if (text === '/delete') {
         const user = await UserModel.findOne({ where: { chatId: chatId } });
