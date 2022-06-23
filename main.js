@@ -5,11 +5,13 @@ const express = require('express');
 const { game, tryAgain } = require('./options');
 const sequelize = require('./connectDB');
 const UserModel = require('./models');
+const RandomOrg = require('random-org');
 
 const app = express();
 
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
 const bot = new TelegramApi(token, { polling: true });
+var random = new RandomOrg({ apiKey: '12345-67890-api-key' });
 const chats = [];
 
 bot.setMyCommands([
@@ -92,7 +94,8 @@ Percent of winnings: ${
 
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
-  const randomNumber = Math.floor(Math.random() * 10);
+  const randomNumber = random
+    .generateIntegers({ min: 0, max: 9, n: 2 })Z
   chats[id] = randomNumber;
 }
 
