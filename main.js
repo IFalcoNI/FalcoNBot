@@ -11,7 +11,7 @@ const app = express();
 
 const token = '5537012360:AAFv5pjkhhmlN-sa261kSIe6V0gJNHxgvRw';
 const bot = new TelegramApi(token, { polling: true });
-var random = new RandomOrg({ apiKey: '12345-67890-api-key' });
+var random = new RandomOrg({ apiKey: '2bd3ac0a-35f8-4eff-9db9-7d9099123719' });
 const chats = [];
 
 bot.setMyCommands([
@@ -94,8 +94,9 @@ Percent of winnings: ${
 
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
-  const randomNumber = random.generateIntegers({ min: 0, max: 9, n: 1 });
-  chats[id] = randomNumber;
+  random.generateIntegers({ min: 0, max: 9, n: 1 }).then(function (result) {
+    chats[id] = result.random.data[0];
+  });
 }
 
 bot.on('callback_query', async (msg) => {
