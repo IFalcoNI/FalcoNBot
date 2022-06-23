@@ -94,8 +94,7 @@ Percent of winnings: ${
 
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
-  const randomNumber = random
-    .generateIntegers({ min: 0, max: 9, n: 2 })Z
+  const randomNumber = random.generateIntegers({ min: 0, max: 9, n: 2 });
   chats[id] = randomNumber;
 }
 
