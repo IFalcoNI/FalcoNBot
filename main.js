@@ -125,7 +125,6 @@ bot.on('callback_query', async (msg) => {
       user.right += 1;
       await bot.sendMessage(chatId, 'You are right', tryAgain);
       await bot.deleteMessage(chatId, msgId);
-      await bot.deleteMessage(chatId, msgId+1);
     } else {
       user.wrong += 1;
       await bot.sendMessage(
@@ -134,7 +133,6 @@ bot.on('callback_query', async (msg) => {
         tryAgain
       );
       await bot.deleteMessage(chatId, msgId);
-          await bot.deleteMessage(chatId, msgId + 1);
     }
     await user.save();
   } catch (error) {
