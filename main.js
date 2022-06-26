@@ -19,7 +19,7 @@ bot.setMyCommands([
   { command: '/statistics', description: 'Your statistic' },
   { command: '/delete', description: 'delete your account' },
   { command: '/game', description: 'Play game' },
-  { command: '/clear', description: 'Clear chat' }
+  { command: '/clear', description: 'Clear all history' }
 ]);
 
 async function startBot() {
