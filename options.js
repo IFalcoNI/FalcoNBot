@@ -23,7 +23,7 @@ module.exports = {
   },
   tryAgain: {
     reply_markup: JSON.stringify({
-      inline_keyboard: [[{ text: 'Try again', callback_data: '/again' }]]
+      inline_keyboard: [[{ text: 'Pick again', callback_data: '/again' }]]
     })
   }
 };
