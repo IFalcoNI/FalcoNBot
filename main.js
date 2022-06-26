@@ -94,8 +94,8 @@ Percent of winnings: ${
 
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
-  random.generateIntegers({ min: 0, max: 9, n: 1 }).then(function (result) {
-    chats[id] = result.random.data[0];
+  random.generateIntegers({ min: 0, max: 9, n: 3 }).then(function (result) {
+    chats[id] = result.random.data;
   });
 }
 
@@ -107,7 +107,10 @@ bot.on('callback_query', async (msg) => {
       return startGame(chatId);
     }
     const user = await UserModel.findOne({ where: { chatId: chatId } });
-    if (text == chats[chatId]) {
+    chats[Cha].forEach(element => {
+      
+    });
+    if (text == chats[chatId][0]) {
       user.right += 1;
       await bot.sendMessage(chatId, 'You are right', tryAgain);
     } else {
