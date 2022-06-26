@@ -123,13 +123,17 @@ bot.on('callback_query', async (msg) => {
       text == chats[chatId][2]
     ) {
       user.right += 1;
-      await bot.sendMessage(chatId, 'You are right', tryAgain);
+      await bot.sendMessage(
+        chatId,
+        `You are right, your picked ${text}, numbers was ${chats[chatId]}`,
+        tryAgain
+      );
       await bot.deleteMessage(chatId, msgId);
     } else {
       user.wrong += 1;
       await bot.sendMessage(
         chatId,
-        `Nice try, number was ${chats[chatId]}`,
+        `Nice try, you picked ${text}, but numbers was ${chats[chatId]}`,
         tryAgain
       );
       await bot.deleteMessage(chatId, msgId);
