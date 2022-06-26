@@ -72,9 +72,7 @@ Percent of winnings: ${
         }
       }
       if (text === '/delete') {
-        const user = await UserModel.findOne({ where: { chatId: chatId } });
-        await UserModel.destroy({ where: { id: user.id } });
-        return bot.sendMessage(chatId, 'User was deleted');
+        deleteUser(chatId)
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 0; index--) {
@@ -84,6 +82,7 @@ Percent of winnings: ${
             console.error(e);
           }
         }
+        deleteUser()
         return;
       }
       return bot.sendMessage(chatId, 'Invalid input');
@@ -100,6 +99,12 @@ async function startGame(id) {
     chats[id] = result.random.data;
   });
 }
+async function deleteUser(id) {
+  const user = await UserModel.findOne({ where: { chatId: id } });
+  await UserModel.destroy({ where: { id: user.id } });
+  return bot.sendMessage(id, 'User was deleted');
+}
+
 bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
