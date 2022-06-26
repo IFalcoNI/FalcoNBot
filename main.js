@@ -17,7 +17,7 @@ const chats = [];
 bot.setMyCommands([
   { command: '/start', description: 'Restart bot' },
   { command: '/statistics', description: 'Your statistic' },
-  { command: '/delete', description: 'delete your account' },
+  { command: '/delete', description: 'delete your account or reset stats' },
   { command: '/game', description: 'Play game' },
   { command: '/clear', description: 'Clear all history' }
 ]);
