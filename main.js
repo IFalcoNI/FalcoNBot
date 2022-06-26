@@ -98,7 +98,7 @@ async function startGame(id) {
     chats[id] = result.random.data;
   });
 }
-
+gdfgdf
 bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
@@ -107,9 +107,7 @@ bot.on('callback_query', async (msg) => {
       return startGame(chatId);
     }
     const user = await UserModel.findOne({ where: { chatId: chatId } });
-    chats[Cha].forEach(element => {
-      
-    });
+    console.log(chats[chatId][0]);
     if (text == chats[chatId][0]) {
       user.right += 1;
       await bot.sendMessage(chatId, 'You are right', tryAgain);
