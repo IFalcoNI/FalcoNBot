@@ -72,7 +72,7 @@ Percent of winnings: ${
         }
       }
       if (text === '/delete') {
-        deleteUser(chatId)
+        return deleteUser(chatId);
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 0; index--) {
@@ -82,8 +82,7 @@ Percent of winnings: ${
             console.error(e);
           }
         }
-        deleteUser()
-        return;
+        return deleteUser(chatId);
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
