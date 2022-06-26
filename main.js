@@ -46,18 +46,22 @@ async function startBot() {
       }
       if (text === '/statistics') {
         const user = await UserModel.findOne({ where: { chatId: chatId } });
-        return bot.sendMessage(
-          chatId,
-          `Player: ${user.name}
+        if (user) {
+          return bot.sendMessage(
+            chatId,
+            `Player: ${user.name}
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
 Percent of winnings: ${
-            user.right === 0 && user.wrong === 0
-              ? 0
-              : Math.round((user.right / (user.right + user.wrong)) * 100)
-          }%
-           `
-        );
+              user.right === 0 && user.wrong === 0
+                ? 0
+                : Math.round((user.right / (user.right + user.wrong)) * 100)
+            }%
+             `
+          );
+        } else {
+          return bot.sendMessage(chatId, 'User not found, please use /start');
+        }
       }
       if (text === '/game') {
         const user = await UserModel.findOne({ where: { chatId: chatId } });
@@ -74,8 +78,6 @@ Percent of winnings: ${
       }
       if (text === '/clear') {
         for (let index = msg.message_id; index >= 1; index--) {
-          if (text == '/start') {
-          }
           try {
             await bot.deleteMessage(chatId, index);
           } catch (e) {
@@ -86,7 +88,7 @@ Percent of winnings: ${
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
-      bot.sendMessage(chatId, 'Error');
+      bot.sendMessage(chatId, 'User already registered');
       console.error(error);
     }
   });
@@ -98,19 +100,31 @@ async function startGame(id) {
     chats[id] = result.random.data;
   });
 }
-gdfgdf
 bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
+  const msgId = msg.message.message_id;
+  console.log(msgId);
   try {
     if (text === '/again') {
       return startGame(chatId);
     }
     const user = await UserModel.findOne({ where: { chatId: chatId } });
-    console.log(chats[chatId][0]);
-    if (text == chats[chatId][0]) {
+    // let isCorrect = false;
+    // await chats[chatId].forEach((element) => {
+    //   if (text == element) {
+    //     isCorrect = true;
+    //   }
+    // });
+    if (
+      // isCorrect
+      text == chats[chatId][0] ||
+      text == chats[chatId][1] ||
+      text == chats[chatId][2]
+    ) {
       user.right += 1;
       await bot.sendMessage(chatId, 'You are right', tryAgain);
+      await bot.deleteMessage(chatId, msgId);
     } else {
       user.wrong += 1;
       await bot.sendMessage(
@@ -118,6 +132,7 @@ bot.on('callback_query', async (msg) => {
         `Nice try, number was ${chats[chatId]}`,
         tryAgain
       );
+      await bot.deleteMessage(chatId, msgId);
     }
     await user.save();
   } catch (error) {
