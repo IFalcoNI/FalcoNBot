@@ -76,7 +76,7 @@ Percent of winnings: ${
       }
       if (text === '/clear') {
         await deleteUser(chatId);
-        for (let index = msg.message_id+1; index >= 0; index--) {
+        for (let index = msg.message_id + 1; index >= 0; index--) {
           try {
             await bot.deleteMessage(chatId, index);
           } catch (e) {
