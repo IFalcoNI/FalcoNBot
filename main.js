@@ -72,9 +72,9 @@ Percent of winnings: ${
         }
       }
       if (text === '/delete') {
-     
-        if (isExisting()) {
-          return deleteUser(chatId);
+        const user = await UserModel.findOne({ where: { chatId: chatId } });
+        if (user) {
+          return deleteUser(chatId, user);
         } else {
           return bot.sendMessage(chatId, 'User not found or already deleted');
         }
@@ -98,18 +98,13 @@ Percent of winnings: ${
   });
 }
 
-async function isExisting(id) {
-  return (await UserModel.findOne({ where: { chatId: id } })) ? true : false;
-}
-
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
   random.generateIntegers({ min: 0, max: 9, n: 3 }).then(function (result) {
     chats[id] = result.random.data;
   });
 }
-async function deleteUser(id) {
-  const user = await UserModel.findOne({ where: { chatId: id } });
+async function deleteUser(id, user) {
   await UserModel.destroy({ where: { id: user.id } });
   return bot.sendMessage(id, 'User was deleted');
 }
