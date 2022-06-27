@@ -72,7 +72,12 @@ Percent of winnings: ${
         }
       }
       if (text === '/delete') {
-        return deleteUser(chatId);
+        const user = await UserModel.findOne({ where: { chatId: chatId } });
+        if (user) {
+          return deleteUser(chatId);
+        } else {
+          return bot.sendMessage(chatId, 'User not found or already deleted');
+        }
       }
       if (text === '/clear') {
         await deleteUser(chatId);
