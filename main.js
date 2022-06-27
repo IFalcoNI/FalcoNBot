@@ -72,8 +72,8 @@ Percent of winnings: ${
         }
       }
       if (text === '/delete') {
-        const user = await UserModel.findOne({ where: { chatId: chatId } });
-        if (user) {
+     
+        if (isExisting()) {
           return deleteUser(chatId);
         } else {
           return bot.sendMessage(chatId, 'User not found or already deleted');
@@ -96,6 +96,10 @@ Percent of winnings: ${
       console.error(error);
     }
   });
+}
+
+async function isExisting(id) {
+  return (await UserModel.findOne({ where: { chatId: id } })) ? true : false;
 }
 
 async function startGame(id) {
