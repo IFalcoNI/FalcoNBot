@@ -80,15 +80,19 @@ Percent of winnings: ${
         }
       }
       if (text === '/clear') {
-        await deleteUser(chatId);
-        for (let index = msg.message_id + 1; index >= 0; index--) {
-          try {
-            await bot.deleteMessage(chatId, index);
-          } catch (e) {
-            console.error(e);
+        const user = await UserModel.findOne({ where: { chatId: chatId } });
+        if (user) {
+          await deleteUser(chatId);
+          for (let index = msg.message_id + 1; index >= 0; index--) {
+            try {
+              await bot.deleteMessage(chatId, index);
+            } catch (e) {
+              console.error(e);
+            }
           }
+        } else {
+          return bot.sendMessage(chatId, 'Something went wrong, maybe bot is not started');
         }
-        return;
       }
       return bot.sendMessage(chatId, 'Invalid input');
     } catch (error) {
