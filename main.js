@@ -71,6 +71,14 @@ Percent of winnings: ${
           return bot.sendMessage(chatId, 'User not found, please use /start');
         }
       }
+      if (text === '/leaderboard') {
+        const users = await UserModel.findAll();
+        if (users) {
+          return bot.sendMessage(chatId, `${users}`);
+        } else {
+          return bot.sendMessage(chatId, 'Leaderboard error');
+        }
+      }
       if (text === '/delete') {
         const user = await UserModel.findOne({ where: { chatId: chatId } });
         if (user) {
