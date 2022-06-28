@@ -30,7 +30,7 @@ async function startBot() {
   } catch (error) {
     console.error(error);
   }
-
+gdfg
   bot.on('message', async (msg) => {
     const text = msg.text;
     const chatId = msg.from.id;
@@ -75,8 +75,8 @@ Percent of winnings: ${
       if (text === '/leaderboard') {
         const users = await UserModel.findAll();
         if (users) {
-          console.log(users);gdf
-          return bot.sendMessage(chatId, `${users}`);
+          console.log(users);
+          return bot.sendMessage(chatId, `${users[0].dataValues.name}`);
         } else {
           return bot.sendMessage(chatId, 'Leaderboard error');
         }
