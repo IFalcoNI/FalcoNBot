@@ -75,7 +75,7 @@ Percent of winnings: ${
       if (text === '/leaderboard') {
         const users = await UserModel.findAll();
         if (users) {
-          return bot.sendMessage(chatId, `${users}`);
+          return bot.sendMessage(chatId, `${users.name}`);
         } else {
           return bot.sendMessage(chatId, 'Leaderboard error');
         }
