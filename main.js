@@ -120,9 +120,11 @@ Percent of winnings: ${user.winPercent}%`
 
 async function startGame(id) {
   await bot.sendMessage(id, `Pick a number between 0 and 9`, game);
-  random.generateIntegers({ min: 0, max: 9, n: 3 }).then(function (result) {
-    chats[id] = result.random.data;
-  });
+  random
+    .generateIntegers({ min: 0, max: 9, n: 3, replacement: false })
+    .then(function (result) {
+      chats[id] = result.random.data;
+    });
 }
 async function deleteUser(id, user) {
   await UserModel.destroy({ where: { id: user.id } });
