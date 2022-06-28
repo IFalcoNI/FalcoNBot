@@ -30,7 +30,6 @@ async function startBot() {
   } catch (error) {
     console.error(error);
   }
-gdfg
   bot.on('message', async (msg) => {
     const text = msg.text;
     const chatId = msg.from.id;
@@ -53,12 +52,7 @@ gdfg
             `Player: ${user.name}
 Right answers: ${user.right} 
 Wrong answers: ${user.wrong}
-Percent of winnings: ${
-              user.right === 0 && user.wrong === 0
-                ? 0
-                : Math.round((user.right / (user.right + user.wrong)) * 100)
-            }%
-             `
+Percent of winnings: ${user.winPercent}%`
           );
         } else {
           return bot.sendMessage(chatId, 'User not found, please use /start');
@@ -75,8 +69,17 @@ Percent of winnings: ${
       if (text === '/leaderboard') {
         const users = await UserModel.findAll();
         if (users) {
-          console.log(users);
-          return bot.sendMessage(chatId, `${users[0].dataValues.name}`);
+          users.sort(
+            (a, b) => b.dataValues.winPercent - a.dataValues.winPercent
+          );
+          let usersString = `| # |         Name       |     Win.%     |`;
+          
+          for (let i = 0; i < users.length; ++i) {
+            usersString += `\n  ${i + 1}. ${users[i].dataValues.name} |     ${
+              users[i].dataValues.winPercent
+            }%`;
+          }
+          return bot.sendMessage(chatId, usersString);
         } else {
           return bot.sendMessage(chatId, 'Leaderboard error');
         }
@@ -130,7 +133,6 @@ bot.on('callback_query', async (msg) => {
   const text = msg.data;
   const chatId = msg.message.chat.id;
   const msgId = msg.message.message_id;
-  console.log(msgId);
   try {
     if (text === '/again') {
       return startGame(chatId);
@@ -164,6 +166,9 @@ bot.on('callback_query', async (msg) => {
       );
       await bot.deleteMessage(chatId, msgId);
     }
+    user.winPercent = `${Math.floor(
+      (user.right / (user.right + user.wrong)) * 100
+    )}`;
     await user.save();
   } catch (error) {
     console.log(error);

@@ -13,7 +13,7 @@ const User = sequelize.define('users', {
     unique: true
   },
   username: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   name: {
     type: DataTypes.STRING,
@@ -24,6 +24,10 @@ const User = sequelize.define('users', {
     defaultValue: 0
   },
   wrong: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  winPercent: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   }
