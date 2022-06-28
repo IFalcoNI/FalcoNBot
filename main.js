@@ -73,7 +73,7 @@ Percent of winnings: ${user.winPercent}%`
             (a, b) => b.dataValues.winPercent - a.dataValues.winPercent
           );
           let usersString = `| # |         Name       |     Win.%     |`;
-          
+
           for (let i = 0; i < users.length; ++i) {
             usersString += `\n  ${i + 1}. ${users[i].dataValues.name} |     ${
               users[i].dataValues.winPercent
@@ -81,7 +81,7 @@ Percent of winnings: ${user.winPercent}%`
           }
           return bot.sendMessage(chatId, usersString);
         } else {
-          return bot.sendMessage(chatId, 'Leaderboard error');
+          return bot.sendMessage(chatId, 'No users in DB, press /start');
         }
       }
       if (text === '/delete') {
@@ -166,9 +166,9 @@ bot.on('callback_query', async (msg) => {
       );
       await bot.deleteMessage(chatId, msgId);
     }
-    user.winPercent = `${Math.floor(
+    user.winPercent = Math.floor(
       (user.right / (user.right + user.wrong)) * 100
-    )}`;
+    );
     await user.save();
   } catch (error) {
     console.log(error);
